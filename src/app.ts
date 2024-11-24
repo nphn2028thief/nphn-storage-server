@@ -2,11 +2,20 @@ import { config } from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 import createHttpError, { HttpError } from "http-errors";
 
 import routes from "./routes";
 
 config();
+
+declare global {
+  namespace Express {
+    interface Request {
+      userId?: number;
+    }
+  }
+}
 
 const app = express();
 
@@ -19,6 +28,7 @@ app.use(
   })
 );
 app.use(morgan("tiny"));
+app.use(cookieParser());
 
 app.use("/api", routes());
 

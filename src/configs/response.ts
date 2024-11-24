@@ -1,6 +1,8 @@
 import { Response } from "express";
 import createHttpError from "http-errors";
 
+import i18nKey from "../constants/i18n";
+
 const response = {
   success: (res: Response, message?: string, key?: any, data?: any) => {
     return res.json({
@@ -10,6 +12,18 @@ const response = {
   },
   badRequest: (res: Response, message?: string) => {
     const err = createHttpError.BadRequest(message || "Invalid data!");
+    return res.status(err.status).send({
+      message: err.message,
+    });
+  },
+  unauthorized: (res: Response, message?: string) => {
+    const err = createHttpError.Unauthorized(message || "Unauthorized.");
+    return res.status(err.status).send({
+      message: err.message,
+    });
+  },
+  forbidden: (res: Response) => {
+    const err = createHttpError.Forbidden("Invalid or expired token.");
     return res.status(err.status).send({
       message: err.message,
     });
@@ -26,10 +40,8 @@ const response = {
       message: err.message,
     });
   },
-  error: (res: Response, message?: string) => {
-    const err = createHttpError.InternalServerError(
-      message || "Oops! Something went wrong!"
-    );
+  error: (res: Response) => {
+    const err = createHttpError.InternalServerError(i18nKey.SERVER_ERROR);
 
     return res.status(err.status).send({
       message: err.message,

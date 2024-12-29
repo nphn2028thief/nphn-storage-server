@@ -21,11 +21,7 @@ const signToken = async (userId: number, res: Response) => {
       res.cookie("token", token, {
         httpOnly: true,
         secure: envConfig.nodeEnv === "production",
-        sameSite: "strict",
-        domain:
-          envConfig.nodeEnv === "production"
-            ? "http://nphn-storage-server.vercel.app"
-            : "localhost",
+        sameSite: "lax",
         maxAge: 3600000, // 60 minutes
         // maxAge: 60000, // 1 minute
       });

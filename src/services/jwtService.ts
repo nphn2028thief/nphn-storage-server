@@ -21,7 +21,7 @@ const signToken = async (userId: number, res: Response) => {
       res.cookie("token", token, {
         httpOnly: true,
         secure: envConfig.nodeEnv === "production",
-        sameSite: "lax",
+        sameSite: "none",
         maxAge: 3600000, // 60 minutes
         // maxAge: 60000, // 1 minute
       });

@@ -22,7 +22,12 @@ const signToken = async (userId: number, res: Response) => {
         httpOnly: true,
         secure: envConfig.nodeEnv === "production",
         sameSite: "strict",
-        maxAge: 3600000,
+        domain:
+          envConfig.nodeEnv === "production"
+            ? "http://nphn-storage-server.vercel.app"
+            : "localhost",
+        maxAge: 3600000, // 60 minutes
+        // maxAge: 60000, // 1 minute
       });
       resolve(token);
     });

@@ -18,13 +18,20 @@ const signToken = async (userId: number, res: Response) => {
         reject(err);
       }
 
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: envConfig.nodeEnv === "production",
-        sameSite: "none",
-        maxAge: 3600000, // 60 minutes
-        // maxAge: 60000, // 1 minute
-      });
+      // On local (dev env)
+      if (envConfig.nodeEnv === "development") {
+        res.cookie("token", token, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "strict",
+          maxAge: 3600000, // 60 minutes
+          // maxAge: 60000, // 1 minute
+        });
+      } else {
+        const cookie = `token=${token}; httpOnly; Secure; SameSite=Strict; Max-Age=3600000`;
+        res.setHeader("Set-Cookie", cookie);
+      }
+
       resolve(token);
     });
   });

@@ -14,7 +14,7 @@ const signToken = async (userId: number, res: Response) => {
     };
 
     JWT.sign(payload, tokenSecret, options, (err, token) => {
-      if (err) {
+      if (err || !token) {
         reject(err);
       }
 
@@ -28,7 +28,7 @@ const signToken = async (userId: number, res: Response) => {
           // maxAge: 60000, // 1 minute
         });
       } else {
-        const cookie = `token=${token}; httpOnly; Secure; SameSite=Strict; Max-Age=3600000`;
+        const cookie = `token=${token}; httpOnly; Secure; SameSite=None; Max-Age=3600000`;
         res.setHeader("Set-Cookie", cookie);
       }
 
